@@ -18,7 +18,7 @@ from project_ETL import *
 print('######################### PCA #########################')
 
 data = raw_data_clean
-data = pd.get_dummies(data, columns = ['ocean_proximity']) 
+#data = pd.get_dummies(data, columns = ['ocean_proximity']) 
 attributeNames = data.columns
 
 X = data.copy()#.drop(['median_house_value'], axis =1 )
@@ -30,7 +30,7 @@ y_cont = data['median_house_value']
 # pca.fit(X_scale) 
 # X_trans = pca.transform(X_scale)
 # print(X_trans.shape[1], ' principal components are needed to cover 90% variability for this data') 
-# 7 principal components are needed to cover 90% variability for this data
+##7 principal components are needed to cover 90% variability for this data
 
 #Scree Plot 
 # plt.plot(range(1, 8), np.cumsum(pca.explained_variance_ratio_))
@@ -51,9 +51,10 @@ Y = Y*(1/np.std(Y,0))
 # of Y
 
 threshold = 0.9
-# Choose two PCs to plot (the projection)
-i = 0
-j = 1
+# Choose two PCs to plot (the projection) PC = Principal Component
+# i = 2
+# j = 3
+# We skip this and instead dynamically find i and j 
 
 # Make the plot
 plt.figure(figsize=(10,15))
@@ -71,6 +72,10 @@ V=Vh.T # For the direction of V to fit the convention in the course we transpose
 # Compute variance explained
 rho = (S*S) / (S*S).sum() 
 
+# Find the indices of the principal components that explain the most variance
+i, j = np.argsort(-rho)[:2]  # sorts in descending order and selects the first two indices
+
+
 # Compute the projection onto the principal components
 Z = U*S;
 
@@ -80,7 +85,7 @@ C = len(classNames)
 for c in range(C):
     plt.plot(Z[y==c,i], Z[y==c,j], '.', alpha=.5)
 plt.xlabel('PC'+str(i+1))
-plt.xlabel('PC'+str(j+1))
+plt.ylabel('PC'+str(j+1))
 plt.title('Standardized Dataset' + '\n' + 'Projection' )
 plt.legend(classNames)
 plt.axis('equal')
@@ -111,6 +116,15 @@ intervals = [
     [3,7,11],
     [4,8,12]
 ]
+intervals = [
+    [0,1,2,3,4,5,6]
+]
+intervals = [
+    [0,1,2,3],
+    [4,5,6,7,8],
+    [9,10,11,12,13]
+]
+
 plot_loc = 3
 for interval in intervals:
     # Plot attribute coefficients in principal component space

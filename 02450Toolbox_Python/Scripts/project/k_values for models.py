@@ -18,7 +18,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 # Load the data
-data_path = 'housing.csv'
+data_path = 'project/Data/housing.csv'
 df = pd.read_csv(data_path, delimiter=',')
 
 # One-hot encode the 'ocean_proximity' column
